@@ -1,0 +1,41 @@
+version: 2
+jobs:
+  build:
+    docker:
+       - image: circleci/ruby:2.5.1
+
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "Gemfile" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: install dependencies
+          command: bundle check || bundle install --jobs=4 --retry=3 --path vendor/bundle
+
+      - run:
+          name: install phraseapp
+          command: wget -O phraseapp https://github.com/phrase/phraseapp-client/releases/download/1.7.4/phraseapp_linux_amd64 && chmod +x phraseapp && sudo mv phraseapp /usr/bin
+
+      - save_cache:
+          paths:
+            - ./vendor
+          key: v1-dependencies-{{ checksum "Gemfile" }}
+
+      # run tests!
+      - run:
+          name: run tests
+          command: bundle exec rake
+
+      # collect reports
+      - store_test_results:
+          path: ~/repo/test-results
+      - store_artifacts:
+          path: ~/repo/test-results
+          destination: test-results
