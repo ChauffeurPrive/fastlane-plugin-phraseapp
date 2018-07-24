@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.name          = 'fastlane-plugin-phraseapp'
   spec.version       = Fastlane::Phraseapp::VERSION
   spec.author        = 'Chauffeur Privé'
-  spec.email         = 'yann.vaillant@chauffeur-prive.com'
+  spec.email         = 'tech-admin@chauffeur-prive.com'
 
   spec.summary       = 'Wrapper around PhraseApp CLI Tool'
   spec.homepage      = "https://github.com/chauffeurprive/fastlane-plugin-phraseapp"
